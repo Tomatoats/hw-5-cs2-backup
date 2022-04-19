@@ -12,7 +12,7 @@ public class Main {
     // last line is total distance.
     public static void main(String[] args) {
 
-        try (Scanner in = new Scanner(Paths.get("in.txt")))
+        try (Scanner in = new Scanner(Paths.get("test_1.txt")))
         {
             //take in the inputs
             while (in.hasNext())
@@ -36,20 +36,20 @@ public class Main {
 
                  //if you need to make sure it still inputs properly use this
                 //*/
-                System.out.printf("%d\n",length);
+                //System.out.printf("%d\n",length);
                 // construct graph
                 Graph graph = new Graph(edges, cities+1);
 
 
-                for (int source = 0; source < cities + 1; source++) {
-                    findShortestPaths(graph, source, cities+1);
-                }
+                //for (int source = 0; source < cities + 1; source++) {
+                    findShortestPathsViaDijkstras(graph, capital, cities+1, capital, length);
+                //}
             }
         } catch (IOException | NoSuchElementException | IllegalStateException e) {
             e.printStackTrace();
         }
     }
-    public static void findShortestPaths(Graph graph, int source, int n)
+    public static void findShortestPathsViaDijkstras(Graph graph, int source, int n, int capital, int length)
     {
 // create a min-heap and push source node having distance 0
         PriorityQueue<Node> minHeap;
@@ -91,16 +91,28 @@ public class Main {
             done[u] = true;
         }
         List<Integer> route = new ArrayList<>();
+        int counter = 0;
+        boolean flag = false;
         for (int i = 0; i < n; i++)
         {
-            if (i != source && dist.get(i) != Integer.MAX_VALUE)
+            /*if (i != source && dist.get(i) != Integer.MAX_VALUE)
             {
                 getRoute(prev, i, route);
                 System.out.printf("Path (%d —> %d): Minimum cost = %d, Route = %s\n",
                         source, i, dist.get(i), route);
                 route.clear();
+            }*/
+            if (source == capital && dist.get(i) == length)
+            {
+                //flag = true;
+                counter++;
+                //getRoute(prev, i, route);
+                //System.out.printf("Path (%d —> %d): Minimum cost = %d, Route = %s\n",
+                        //source, i, dist.get(i), route);
+                //route.clear();
             }
         }
+        System.out.printf("In city: %d\n",counter);
     }
     private static void getRoute(int[] prev, int i, List<Integer> route)
     {
